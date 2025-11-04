@@ -3,7 +3,7 @@ import { writeFile } from "node:fs/promises";
 
 async function getData()
 {
-    const url = 'https://api.chess.com/pub/player/Aggtsel/games/2024/01';
+    const url = 'https://api.chess.com/pub/player/Aggtsel/games/2025/11';
 
 
     const response = await fetch(url);
@@ -225,6 +225,67 @@ function calculateLosePercentage(dataFile)
 }
 
 
+
+function findMostCommonOpening(dataFile) {
+    const whiteOpeningMap = new Map();
+    const blackOpeningMap = new Map();
+    const moveRegex = /\b(?:O-O-O|O-O|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)\b/g;
+
+    for (const game of dataFile.games) {
+        if (!game.pgn) continue;
+
+        const movesOnly = game.pgn
+            .replace(/\[.*?\]/gs, " ")          // Remove headers
+            .replace(/\{.*?\}|\(.*?\)|\$\d+/g, " ") // Remove comments and variations
+            .replace(/\d+\.(\.\.)?/g, " ")      // Remove move numbers
+            .replace(/\s+/g, " ")
+            .trim();
+
+        const moves = movesOnly.match(moveRegex);
+        if (!moves) continue;
+
+        const usernameWhite = game.white.username.toLowerCase();
+        const usernameBlack = game.black.username.toLowerCase();
+
+        if (usernameWhite === 'aggtsel') {
+            if (moves.length >= 4) {
+                const first4 = moves.slice(0, 4).join(" ");
+                whiteOpeningMap.set(first4, (whiteOpeningMap.get(first4) || 0) + 1);
+            }
+        }
+
+        if (usernameBlack === 'aggtsel') {
+            if (moves.length >= 8) {
+                // Black moves: take the first 4 moves made by Black (indices 1,3,5,7)
+                const first4Black = [moves[1], moves[3], moves[5], moves[7]].join(" ");
+                blackOpeningMap.set(first4Black, (blackOpeningMap.get(first4Black) || 0) + 1);
+            }
+        }
+    }
+
+    // Get most common White opening for Aggtsel
+    let maxWhiteCount = 0, mostCommonWhite = "";
+    for (const [opening, count] of whiteOpeningMap.entries()) {
+        if (count > maxWhiteCount) {
+            maxWhiteCount = count;
+            mostCommonWhite = opening;
+        }
+    }
+
+    // Get most common Black opening for Aggtsel
+    let maxBlackCount = 0, mostCommonBlack = "";
+    for (const [opening, count] of blackOpeningMap.entries()) {
+        if (count > maxBlackCount) {
+            maxBlackCount = count;
+            mostCommonBlack = opening;
+        }
+    }
+
+    console.log("Aggtsel's most common opening as White:", mostCommonWhite, "Count:", maxWhiteCount);
+    console.log("Aggtsel's most common opening as Black:", mostCommonBlack, "Count:", maxBlackCount);
+}
+
+
 const data = await getData();
 
 calculateAverageAccuracy(data);
@@ -238,3 +299,5 @@ calculateWInPercentage(data);
 calculateDrawPercentage(data);
 
 calculateLosePercentage(data);
+
+findMostCommonOpening(data);
