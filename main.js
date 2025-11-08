@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 
-const name = "Aggtsel";
+const name = "Hikaru";
 
 
 async function getData()
@@ -37,10 +37,13 @@ function calculateAverageAccuracy(dataFile)
     for(let i=0; i<dataFile.games.length;i++)
     {
        
-        if(!dataFile.games[i].accuracies) continue;
+        
 
         if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
         {
+
+            if(!dataFile.games[i].accuracies || !dataFile.games[i].accuracies.white) continue;
+            
             generalSum += dataFile.games[i].accuracies.white;
             generalPL++;
 
@@ -49,6 +52,8 @@ function calculateAverageAccuracy(dataFile)
         }
         else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
         {
+            if(!dataFile.games[i].accuracies || !dataFile.games[i].accuracies.black) continue;
+
             generalSum += dataFile.games[i].accuracies.black;
             generalPL++;
 
@@ -192,33 +197,33 @@ function calculateWInPercentage(dataFile)
 
 function calculateDrawPercentage(dataFile)
 {
-    let drawByStalemate = 0;
+    let drawByStalemate = 0;        
     let drawByAgreement = 0;
     let drawByRepetition = 0;
     let drawByInsufficient = 0;
-
+    
     let drawtotal = 0;
 
     for(let i=0;i<dataFile.games.length;i++) 
         {
             if(!dataFile.games[i].white.result || !dataFile.games[i].black.result) continue
 
-            if(dataFile.games[i].black.result.toLowerCase() === "stalemate" || dataFile.games[i].white.result.toLowerCase() === "stalemate")
+            if(dataFile.games[i].black.result.toLowerCase() === "stalemate")
             {
                 drawByStalemate++;
                 drawtotal++;
             }
-            else if(dataFile.games[i].black.result.toLowerCase() === "agreed" || dataFile.games[i].white.result.toLowerCase() === "agreed")
+            else if(dataFile.games[i].black.result.toLowerCase() === "agreed")
             {
                 drawByAgreement++;
                 drawtotal++;
             }
-            else if(dataFile.games[i].black.result.toLowerCase() === "repetition" || dataFile.games[i].white.result.toLowerCase() === "repetition")
+            else if(dataFile.games[i].black.result.toLowerCase() === "repetition")
                 {
                     drawByRepetition++;
                     drawtotal++;
                 }
-            else if(dataFile.games[i].black.result.toLowerCase() === "insufficient" || dataFile.games[i].white.result.toLowerCase() === "insufficient")
+            else if(dataFile.games[i].black.result.toLowerCase() === "insufficient")
                 {
                     drawByInsufficient++;
                     drawtotal++;
@@ -267,8 +272,6 @@ function calculateLosePercentage(dataFile)
 
         if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
         {
-            if(dataFile.games[i].black.result.toLowerCase() === "win")
-            {
                 if(dataFile.games[i].white.result.toLowerCase() === "checkmated")
                 {
                     lostByCheckmate++;
@@ -284,13 +287,11 @@ function calculateLosePercentage(dataFile)
                             lostByTimeOut++;
                             losetotal++;
                         }    
-            }
+            
         }
 
         else if (dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
         {
-            if(dataFile.games[i].white.result.toLowerCase() === "win")
-                {
                     if(dataFile.games[i].black.result.toLowerCase() === "checkmated")
                     {
                         lostByCheckmate++;
@@ -303,7 +304,7 @@ function calculateLosePercentage(dataFile)
                         {
                              lostByTimeOut++;
                          }  
-                }
+                
         }
 
         
@@ -318,11 +319,11 @@ function calculateLosePercentage(dataFile)
 function findMostCommonOpening(dataFile) {
     const whiteOpeningMap = new Map();
     const blackOpeningMap = new Map();
-    const moveRegex = /\b(?:O-O-O|O-O|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)\b/g;
+    // Simplified regex: captures moves, ignores game result/comment markers
+    const moveRegex = /[A-Z]?[a-h]?[1-8]?[x-]?[a-h][1-8](?:=[QRNKB])?|O-O(?:-O)?/g; 
 
     let countHowManyWhiteCommon = 0;
     let countHowManyBlackCommon = 0;
-
     let howManyWonWhiteCommon = 0;
     let howManyWonBlackCommon = 0;
 
@@ -330,33 +331,37 @@ function findMostCommonOpening(dataFile) {
     for (const game of dataFile.games) {
         if (!game.pgn) continue;
 
+        // 1. Clean PGN: Remove headers, move numbers, result markers, and comments
         const movesOnly = game.pgn
-            .replace(/\[.*?\]/gs, " ")          // Remove headers
-            .replace(/\{.*?\}|\(.*?\)|\$\d+/g, " ") // Remove comments and variations
-            .replace(/\d+\.(\.\.)?/g, " ")      // Remove move numbers
-            .replace(/\s+/g, " ")
+            .replace(/\[.*?\]/gs, "")       // Remove headers
+            .replace(/\{.*?\}|\(.*?\)|\$\d+/g, "") // Remove comments and variations
+            .replace(/\d+\.(\.\.)?/g, "")   // Remove move numbers
+            .replace(/\s*[10]\s*-\s*[10]\s*/g, "") // Remove result markers (1-0, 0-1, 1/2-1/2)
             .trim();
 
+        // 2. Extract moves using the regex
         const moves = movesOnly.match(moveRegex);
         if (!moves) continue;
 
-
+        const usernameLower = name.toLowerCase();
         const usernameWhite = game.white.username.toLowerCase();
         const usernameBlack = game.black.username.toLowerCase();
 
-
-        if (usernameWhite === name.toLowerCase() && moves.length >= 4) {
+        // White Opening: First 2 moves (4 half-moves required)
+        if (usernameWhite === usernameLower && moves.length >= 4) {
             const first4 = moves.slice(0, 4).join(" ");
             whiteOpeningMap.set(first4, (whiteOpeningMap.get(first4) || 0) + 1);
         }
 
-        if (usernameBlack === name.toLowerCase() && moves.length >= 8) {
-            const first4Black = [moves[1], moves[3], moves[5], moves[7]].join(" ");
-            blackOpeningMap.set(first4Black, (blackOpeningMap.get(first4Black) || 0) + 1);
+        // Black Opening: First 2 moves played by Black (4 half-moves required)
+        if (usernameBlack === usernameLower && moves.length >= 4) { // MOVES.LENGTH >= 4 IS CONSISTENT
+            // Black's moves are at indices 1 and 3 (2nd and 4th half-move)
+            const firstBlackMoves = [moves[1], moves[3]].join(" ");
+            blackOpeningMap.set(firstBlackMoves, (blackOpeningMap.get(firstBlackMoves) || 0) + 1);
         }
     }
 
-    // --- Find most common openings ---
+    // --- Find most common openings (based on counts) ---
     let maxWhiteCount = 0, mostCommonWhite = "";
     for (const [opening, count] of whiteOpeningMap.entries()) {
         if (count > maxWhiteCount) {
@@ -372,16 +377,22 @@ function findMostCommonOpening(dataFile) {
             mostCommonBlack = opening;
         }
     }
+    
+    // Safety check for division by zero
+    if (maxWhiteCount === 0 && maxBlackCount === 0) {
+        console.log("Not enough data to determine common openings.");
+        return;
+    }
 
-    // --- PASS 2: Count wins using those openings ---
+    // --- PASS 2: Count wins using those most common openings ---
     for (const game of dataFile.games) {
         if (!game.pgn) continue;
 
         const movesOnly = game.pgn
-            .replace(/\[.*?\]/gs, " ")
-            .replace(/\{.*?\}|\(.*?\)|\$\d+/g, " ")
-            .replace(/\d+\.(\.\.)?/g, " ")
-            .replace(/\s+/g, " ")
+            .replace(/\[.*?\]/gs, "")
+            .replace(/\{.*?\}|\(.*?\)|\$\d+/g, "")
+            .replace(/\d+\.(\.\.)?/g, "")
+            .replace(/\s*[10]\s*-\s*[10]\s*/g, "")
             .trim();
 
         const moves = movesOnly.match(moveRegex);
@@ -398,8 +409,9 @@ function findMostCommonOpening(dataFile) {
         }
 
         // BLACK
-        if (game.black.username.toLowerCase() === name.toLowerCase() && moves.length >= 8) {
-            if ([moves[1], moves[3], moves[5], moves[7]].join(" ") === mostCommonBlack) {
+        if (game.black.username.toLowerCase() === name.toLowerCase() && moves.length >= 4) { // MOVES.LENGTH >= 4 IS CONSISTENT
+            const currentBlackMoves = [moves[1], moves[3]].join(" ");
+            if (currentBlackMoves === mostCommonBlack) {
                 countHowManyBlackCommon++;
                 if (game.black.result === "win") {
                     howManyWonBlackCommon++;
@@ -407,21 +419,26 @@ function findMostCommonOpening(dataFile) {
             }
         }
     }
-
-
-        
-
-
-    console.log("Most common opening as White:", mostCommonWhite, 
-                "Count:", maxWhiteCount,
-                "Winrate:", howManyWonWhiteCommon/countHowManyWhiteCommon)
-                
-
-    console.log("Most common opening as Black:", mostCommonBlack, 
-                "Count:", maxBlackCount,
-                "Winrate:", howManyWonBlackCommon/countHowManyBlackCommon)
-
+    
+    // --- Final Output ---
+    console.log("\n--- Most Common Opening Analysis ---");
+    
+    if (maxWhiteCount > 0) {
+        console.log("Most common opening as White:", mostCommonWhite);
+        console.log("Count:", maxWhiteCount);
+        console.log("Winrate:", (howManyWonWhiteCommon / countHowManyWhiteCommon).toFixed(3));
+    } else {
+        console.log("Not enough White games found for opening analysis.");
     }
+
+    if (maxBlackCount > 0) {
+        console.log("\nMost common opening as Black:", mostCommonBlack);
+        console.log("Count:", maxBlackCount);
+        console.log("Winrate:", (howManyWonBlackCommon / countHowManyBlackCommon).toFixed(3));
+    } else {
+        console.log("Not enough Black games found for opening analysis.");
+    }
+}
 
 
 
@@ -436,37 +453,102 @@ function calculateStreaks(dataFile)
             {
                 results.push(dataFile.games[i].white.result);
             }
-            else 
+            else if(dataFile.games[i].white.result.toLowerCase() === "stalemate" || dataFile.games[i].white.result.toLowerCase() === "agreed" || dataFile.games[i].white.result.toLowerCase() === "repetition" || dataFile.games[i].white.result.toLowerCase() === "insufficient")
+            {
+                results.push("draw"); 
+            }
+            else
             {
                 results.push("lose");
             }
         }
+
         else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
         {
             if(dataFile.games[i].black.result.toLowerCase() === "win")
                 {
                     results.push(dataFile.games[i].black.result);
                 }
-                else 
+                else if(dataFile.games[i].black.result.toLowerCase() === "stalemate" || dataFile.games[i].black.result.toLowerCase() === "agreed" || dataFile.games[i].black.result.toLowerCase() === "repetition" || dataFile.games[i].black.result.toLowerCase() === "insufficient")
+                {
+                    results.push("draw"); 
+                }
+                else
                 {
                     results.push("lose");
                 }
         }
-        console.log(results);
+       
     }
+
+    console.log(results);
+
     findWinStreak(results);
+    findDrawStreak(results);
     findLoseStreak(results);
 }
 
-function findWinStreak(results)
+function findWinStreak(results) {
+    const listOfWinCounts = [];
+    let winCounter = 0;
+
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] === "win") {
+            winCounter++;
+        } else if (winCounter > 0) {
+            listOfWinCounts.push(winCounter);
+            winCounter = 0;
+        }
+    }
+
+    if (winCounter > 0) listOfWinCounts.push(winCounter);
+
+    console.log("All win streaks:", listOfWinCounts);
+    console.log("Longest win streak:", Math.max(0, ...listOfWinCounts));
+}
+
+function findDrawStreak(results)
 {
-    
+    const listOfLoseCounts = [];
+    let drawCounter = 0;
+
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] === "draw") {
+            drawCounter++;
+        } else if (drawCounter > 0) {
+            listOfLoseCounts.push(drawCounter);
+            drawCounter = 0;
+        }
+    }
+
+    if (drawCounter > 0) listOfLoseCounts.push(drawCounter);
+
+    console.log("All lose streaks:", listOfLoseCounts);
+    console.log("Longest lose streak:", Math.max(0, ...listOfLoseCounts));
 }
 
 function findLoseStreak(results)
 {
+    const listOfLoseCounts = [];
+    let loseCounter = 0;
 
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] === "lose") {
+            loseCounter++;
+        } else if (loseCounter > 0) {
+            listOfLoseCounts.push(loseCounter);
+            loseCounter = 0;
+        }
+    }
+
+    if (loseCounter > 0) listOfLoseCounts.push(loseCounter);
+
+    console.log("All lose streaks:", listOfLoseCounts);
+    console.log("Longest lose streak:", Math.max(0, ...listOfLoseCounts));
 }
+
+
+
 
 const data = await getData();
 
