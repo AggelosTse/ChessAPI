@@ -39,21 +39,40 @@ export function losePercentage(dataFile)
                     if(dataFile.games[i].black.result.toLowerCase() === "checkmated")
                     {
                         lostByCheckmate++;
+                        losetotal++;
                     }
                     else if(dataFile.games[i].black.result.toLowerCase() === "resigned")
                         {
                             lostByResignation++;
+                            losetotal++;
                         }
                     else if(dataFile.games[i].black.result.toLowerCase() === "timeout")
                         {
                              lostByTimeOut++;
+                             losetotal++;
                          }  
                 
         }
 
         
     }
-    console.log("LoseCheckmate: " + lostByCheckmate + "\n");
-    console.log("LoseResign: " + lostByResignation + "\n");
-    console.log("LostTimeout: " + lostByTimeOut + "\n");
+
+    if(losetotal === 0) 
+    {
+        console.log("No loses found. \n");
+        return;
+    }
+        
+        
+    console.log("Loses By Checkmates: \n");
+    console.log(    "Total checkmate loses: " + lostByCheckmate + "\n");
+    console.log(    "Checkmate loses percentage: " + Math.round((lostByCheckmate/losetotal)*100) + "\n");
+
+    console.log("Loses By Resignation: \n");
+    console.log(    "Total Resignation loses: " + lostByResignation + "\n");
+    console.log(    "Resignation loses percentage: " + Math.round((lostByResignation/losetotal)*100) + "\n");
+
+    console.log("Loses By timeout: \n");
+    console.log(    "Total timeout loses: " + lostByTimeOut + "\n");
+    console.log(    "Timeout loses percentage: " + Math.round((lostByTimeOut/losetotal)*100) + "\n");
 }

@@ -1,11 +1,11 @@
 import { writeFile } from "node:fs/promises";
-import {name} from './utils.js';
 
-
-
-export async function getData()
+export async function getData(name,mainOption,subOption)
 {
-    const url = `https://api.chess.com/pub/player/${name}/games/2024/05`;
+    
+
+
+    const url = `https://api.chess.com/pub/player/ffijidbfi/games/2025/11`;
 
 
 

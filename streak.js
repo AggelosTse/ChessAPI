@@ -1,7 +1,7 @@
 import {name} from './utils.js';
 
 
-export function Streaks(dataFile)
+export function streaks(dataFile)
 {
    let results = [];
     for(let i=0;i<dataFile.games.length;i++)

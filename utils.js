@@ -6,29 +6,34 @@ import { winPercentage } from './winPercentages.js';
 import { drawPercentage } from './drawPercentages.js';
 import { losePercentage } from './losePercentages.js';
 import { CommonOpenings } from './mostCommonOpening.js';
-import { Streaks } from './streaks.js';
+import { streaks } from './streak.js';
 import { averageMoves } from './averageTotalMoves.js';
+import { highestOpponentElo } from './highestOpponentElo.js';
 
 
+export async function nextPhase(name,mainOption,subOption)
+{
+    const data = await getData(name,mainOption,subOption);
 
-export const name = "Aggtsel";
+    averageAccuracy(data);
 
-const data = await getData();
+    totalGames(data);
 
-averageAccuracy(data);
+    averageOpponentElo(data);
 
-totalGames(data);
+    highestOpponentElo(data);
 
-averageOpponentElo(data);
+    winPercentage(data);
 
-winPercentage(data);
+    drawPercentage(data);
 
-drawPercentage(data);
+    losePercentage(data);
 
-losePercentage(data);
+    CommonOpenings(data);
 
-CommonOpenings(data);
+    streaks(data);
 
-Streaks(data);
+    averageMoves(data);
 
-averageMoves(data);
+
+}
