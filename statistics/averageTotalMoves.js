@@ -8,7 +8,7 @@ export function averageMoves(dataFile,name)
 
     const moveRegex = /[KQRNB]?[a-h]?[1-8]?[x-]?[a-h][1-8](?:=[QRNB])?|O-O(?:-O)?/g;
 
-    for(let i=0;i<dataFile.games.length;i++)
+    for(let i=0;i<dataFile.length;i++)
     {
         const movesOnly = dataFile.games[i].pgn
 
@@ -23,7 +23,7 @@ export function averageMoves(dataFile,name)
 
         if(!moves) continue;
 
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
             for(let j=0;j<moves.length;j+=2)
             {
@@ -33,7 +33,7 @@ export function averageMoves(dataFile,name)
             listOfTotalMoves.push(sumWhiteMoves);
             sumWhiteMoves = 0;
         }
-        else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if(dataFile[i].black.username.toLowerCase() === name.toLowerCase())
         {
             for(let j=1;j<moves.length;j+=2)
                 {

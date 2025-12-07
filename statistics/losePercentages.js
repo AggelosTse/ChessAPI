@@ -12,24 +12,24 @@ export function losePercentage(dataFile,name)
     const finalLoseList = [];
 
 
-    for(let i=0;i<dataFile.games.length;i++) 
+    for(let i=0;i<dataFile.length;i++) 
     {
-        if(!dataFile.games[i].white.result || !dataFile.games[i].black.result) continue
+        if(!dataFile[i].white.result || !dataFile[i].black.result) continue
 
 
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
-                if(dataFile.games[i].white.result.toLowerCase() === "checkmated")
+                if(dataFile[i].white.result.toLowerCase() === "checkmated")
                 {
                     lostByCheckmate++;
                     losetotal++;
                 }
-                else if(dataFile.games[i].white.result.toLowerCase() === "resigned")
+                else if(dataFile[i].white.result.toLowerCase() === "resigned")
                     {
                         lostByResignation++;
                         losetotal++;
                     }
-                else if(dataFile.games[i].white.result.toLowerCase() === "timeout")
+                else if(dataFile[i].white.result.toLowerCase() === "timeout")
                         {
                             lostByTimeOut++;
                             losetotal++;
@@ -37,19 +37,19 @@ export function losePercentage(dataFile,name)
             
         }
 
-        else if (dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if (dataFile[i].black.username.toLowerCase() === name.toLowerCase())
         {
-                    if(dataFile.games[i].black.result.toLowerCase() === "checkmated")
+                    if(dataFile[i].black.result.toLowerCase() === "checkmated")
                     {
                         lostByCheckmate++;
                         losetotal++;
                     }
-                    else if(dataFile.games[i].black.result.toLowerCase() === "resigned")
+                    else if(dataFile[i].black.result.toLowerCase() === "resigned")
                         {
                             lostByResignation++;
                             losetotal++;
                         }
-                    else if(dataFile.games[i].black.result.toLowerCase() === "timeout")
+                    else if(dataFile[i].black.result.toLowerCase() === "timeout")
                         {
                              lostByTimeOut++;
                              losetotal++;

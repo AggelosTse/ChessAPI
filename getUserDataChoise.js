@@ -4,6 +4,30 @@ function padMonth(month)
     return x;
 }
 
+function getDifferentDays(allGames,currentTime ,dayoption)
+{
+    const tempList = [];
+
+    let priorDate = new Date(currentTime);
+    priorDate.setDate(currentTime.getDate() - dayoption);
+    
+    // 2. CRITICAL FIX: Zero out the time components to set the cutoff to midnight (00:00:00)
+    priorDate.setHours(0, 0, 0, 0);
+
+
+   let priorDateTimestamp = Math.floor(priorDate.getTime() / 1000); //se seconds, etsi ta exei to api
+
+   for(let i=0;i<allGames.length;i++)
+   {
+       if(allGames[i].end_time >= priorDateTimestamp)
+       {
+        tempList.push(allGames[i]);
+       }
+      
+   }
+   return tempList;
+}
+
 
 export async function getDaysData(name, subOption)
 {
@@ -14,7 +38,6 @@ export async function getDaysData(name, subOption)
     const currentTime = new Date();
 
     const currentMonth = currentTime.getMonth() + 1;
-    const currentDay = currentTime.getDay();
     const currentYear = currentTime.getFullYear();
 
     if(currentMonth === 1)      //january
@@ -45,42 +68,42 @@ export async function getDaysData(name, subOption)
 
     const data = await Promise.all(responses.map(responses => responses.json()));
     let allGames = data.flatMap(month => month.games || []);
-
+    
     allGames = allGames.sort((a, b) => b.end_time - a.end_time);
     
 
 
    
-
     let finalListOfGames = [];
+
+    
 
     switch(subOption)
         {
             
             case 1:
-                let priorDate = new Date(new Date().setDate(currentTime.getDate() - 1));
-                let priorDateTimestamp = priorDate.getTime() / 1000;  //se seconds, etsi ta exei to api
-                for(let i=0;i<allGames.length;i++)
-                {
-                    if(allGames[i].end_time >= priorDateTimestamp)
-                    {
-                        finalListOfGames.push(allGames[i]);
-                    }
-                }
-                return finalListOfGames;
+                 finalListOfGames = getDifferentDays(allGames, currentTime, subOption);
+                 break;
              
-
-
             case 3:
+                finalListOfGames = getDifferentDays(allGames, currentTime, subOption);
                 break;
+
             case 7:
+                finalListOfGames = getDifferentDays(allGames, currentTime, subOption);
                 break;
+
             case 14:
+                finalListOfGames = getDifferentDays(allGames, currentTime, subOption);
                 break;
+
             case 30:
+                finalListOfGames = getDifferentDays(allGames, currentTime, subOption);
                 break;
+
         }
-            
+       
+        return finalListOfGames;
 }
 
 export async function getMonthsData(subOption)

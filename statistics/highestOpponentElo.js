@@ -7,26 +7,26 @@ export function highestOpponentElo(dataFile,name)
 
     const highestopplist = [];
 
-    for(let i=0;i<dataFile.games.length;i++)
+    for(let i=0;i<dataFile.length;i++)
     {
-        if(!dataFile.games[i].white || !dataFile.games[i].black) continue;
+        if(!dataFile[i].white || !dataFile[i].black) continue;
 
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
-            if(dataFile.games[i].white.result === "win")
+            if(dataFile[i].white.result === "win")
             {
-                listOfHighestEloWon.push(dataFile.games[i].black.rating);   
+                listOfHighestEloWon.push(dataFile[i].black.rating);   
             }
-            listOfHighestElo.push(dataFile.games[i].black.rating);  
+            listOfHighestElo.push(dataFile[i].black.rating);  
             
         }
-        else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if(dataFile[i].black.username.toLowerCase() === name.toLowerCase())
             {
-                if(dataFile.games[i].black.result === "win")
+                if(dataFile[i].black.result === "win")
                 {
-                    listOfHighestEloWon.push(dataFile.games[i].white.rating);   
+                    listOfHighestEloWon.push(dataFile[i].white.rating);   
                 }
-                listOfHighestElo.push(dataFile.games[i].white.rating);  
+                listOfHighestElo.push(dataFile[i].white.rating);  
                 
             }
             

@@ -11,26 +11,26 @@ export function drawPercentage(dataFile)
     const finalDrawArray = [];
 
 
-    for(let i=0;i<dataFile.games.length;i++) 
+    for(let i=0;i<dataFile.length;i++) 
         {
-            if(!dataFile.games[i].white.result || !dataFile.games[i].black.result) continue
+            if(!dataFile[i].white.result || !dataFile[i].black.result) continue
 
-            if(dataFile.games[i].black.result.toLowerCase() === "stalemate")
+            if(dataFile[i].black.result.toLowerCase() === "stalemate")
             {
                 drawByStalemate++;
                 drawtotal++;
             }
-            else if(dataFile.games[i].black.result.toLowerCase() === "agreed")
+            else if(dataFile[i].black.result.toLowerCase() === "agreed")
             {
                 drawByAgreement++;
                 drawtotal++;
             }
-            else if(dataFile.games[i].black.result.toLowerCase() === "repetition")
+            else if(dataFile[i].black.result.toLowerCase() === "repetition")
                 {
                     drawByRepetition++;
                     drawtotal++;
                 }
-            else if(dataFile.games[i].black.result.toLowerCase() === "insufficient")
+            else if(dataFile[i].black.result.toLowerCase() === "insufficient")
                 {
                     drawByInsufficient++;
                     drawtotal++;

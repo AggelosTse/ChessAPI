@@ -14,13 +14,12 @@ import { highestOpponentElo } from './statistics/highestOpponentElo.js';
 
 export async function nextPhase(name,mainOption,subOption)
 {
-    
+    let data = [];
 
-    const data = await getData(name,mainOption,subOption);
-
+    data = await getData(name,mainOption,subOption);
 
     const accuracy = averageAccuracy(data,name);            //list, 1st element general,2nd white, 3rd black
-
+    
     const total = totalGames(data);                         //number
 
     const averageOpponElo = averageOpponentElo(data,name);  //number
@@ -39,7 +38,8 @@ export async function nextPhase(name,mainOption,subOption)
 
     const averagMove = averageMoves(data,name); //value 
 
-    const results = makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove);
+    const results = await makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove);
 
+    return results;
 
 }

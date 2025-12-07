@@ -10,30 +10,28 @@ export function averageAccuracy(dataFile,name)
   
     const accuracyArray = [];
 
-    for(let i=0; i<dataFile.games.length;i++)
+    for(let i=0; i<dataFile.length;i++)
     {
        
-        
-
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
 
-            if(!dataFile.games[i].accuracies || !dataFile.games[i].accuracies.white) continue;
+            if(!dataFile[i].accuracies || !dataFile[i].accuracies.white) continue;
             
-            generalSum += dataFile.games[i].accuracies.white;
+            generalSum += dataFile[i].accuracies.white;
             generalPL++;
 
-            whiteSum += dataFile.games[i].accuracies.white;
+            whiteSum += dataFile[i].accuracies.white;
             whitePL++;
         }
-        else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if(dataFile[i].black.username.toLowerCase() === name.toLowerCase())
         {
-            if(!dataFile.games[i].accuracies || !dataFile.games[i].accuracies.black) continue;
+            if(!dataFile[i].accuracies || !dataFile[i].accuracies.black) continue;
 
-            generalSum += dataFile.games[i].accuracies.black;
+            generalSum += dataFile[i].accuracies.black;
             generalPL++;
 
-            blackSum += dataFile.games[i].accuracies.black;
+            blackSum += dataFile[i].accuracies.black;
             blackPL++;
         }
     }
@@ -41,7 +39,7 @@ export function averageAccuracy(dataFile,name)
         console.log("No games played in this period.");
 
         accuracyArray.push("NA");
-        return;
+        return [];
     }
 
     console.log("General Accuracy:", Math.round((generalSum / generalPL)));
@@ -53,8 +51,12 @@ export function averageAccuracy(dataFile,name)
         accuracyArray.push(whiteSum / whitePL);
     }
     else 
+    {
+
+    
         console.log("No white games played in this period.");
         accuracyArray.push("NA");
+    }
 
     if (blackPL > 0)
     {

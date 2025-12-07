@@ -51,20 +51,23 @@ function showSubOptions() {
     document.getElementById("submitContainer").appendChild(submitBtn);
 }
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
     event.preventDefault();
 
     const name = document.getElementById("name").value;
     const mainOption = document.getElementById("mainOption").value;
     const subSelect = document.getElementById("subSelect");
-    const subOption = subSelect ? subSelect.value : "";
+    let subOption = subSelect ? subSelect.value : "";
+
+
+    subOption = parseInt(subSelect ? subSelect.value : "0", 10);
 
     if (!name.trim()) {
         alert("Please enter your Chess.com username.");
         return;
     }
 
-    nextPhase(name,mainOption,subOption);
+    const results = await nextPhase(name,mainOption,subOption);  //json me stats
   
 }
 

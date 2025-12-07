@@ -1,4 +1,4 @@
-import { getDaysData,getMonthsData,getYearsData } from "./getUserDataChoise";
+import { getDaysData,getMonthsData,getYearsData } from "./getUserDataChoise.js";
 
 export async function getData(name,mainOption,subOption)
 {
@@ -9,23 +9,28 @@ export async function getData(name,mainOption,subOption)
     if(checkresponse.status !== 200)
     {
         console.log("No player name found. \n");
-        return;
+        return [];
     }
 
 
-    switch(mainOption)         //[1, 3, 7, 14, 21, 30];
+    let data = [];
+    switch(mainOption)         
     {
         case "Days":
             {
                 data = await getDaysData(name, subOption);
+                
+                break;
             }
         case "Months":
             {
                 data = await getMonthsData(name, subOption);
+                break;
             }
         case "Years":
             {
                 data = await getYearsData(name, subOption);
+                break;
             }
     }
 

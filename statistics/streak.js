@@ -4,37 +4,37 @@ export function streaks(dataFile,name)
 {
    let results = [];
 
-   //const finalStreaksList = [];
+   let finalStreaksList = [];
 
-    for(let i=0;i<dataFile.games.length;i++)
+    for(let i=0;i<dataFile.length;i++)
     {
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
-            if(dataFile.games[i].white.result.toLowerCase() === "win")
+            if(dataFile[i].white.result.toLowerCase() === "win")
             {
-                results.push(dataFile.games[i].white.result);
+                results.push(dataFile[i].white.result);
             }
-            else if(dataFile.games[i].white.result.toLowerCase() === "stalemate" || dataFile.games[i].white.result.toLowerCase() === "agreed" || dataFile.games[i].white.result.toLowerCase() === "repetition" || dataFile.games[i].white.result.toLowerCase() === "insufficient")
+            else if(dataFile[i].white.result.toLowerCase() === "stalemate" || dataFile[i].white.result.toLowerCase() === "agreed" || dataFile[i].white.result.toLowerCase() === "repetition" || dataFile[i].white.result.toLowerCase() === "insufficient")
             {
                 results.push("draw"); 
             }
-            else if(dataFile.games[i].white.result.toLowerCase() === "checkmated" || dataFile.games[i].white.result.toLowerCase() === "resigned" || dataFile.games[i].white.result.toLowerCase() === "timeout")
+            else if(dataFile[i].white.result.toLowerCase() === "checkmated" || dataFile[i].white.result.toLowerCase() === "resigned" || dataFile[i].white.result.toLowerCase() === "timeout")
             {
                 results.push("lose");
             }
         }
 
-        else if(dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if(dataFile[i].black.username.toLowerCase() === name.toLowerCase())
         {
-            if(dataFile.games[i].black.result.toLowerCase() === "win")
+            if(dataFile[i].black.result.toLowerCase() === "win")
                 {
-                    results.push(dataFile.games[i].black.result);
+                    results.push(dataFile[i].black.result);
                 }
-                else if(dataFile.games[i].black.result.toLowerCase() === "stalemate" || dataFile.games[i].black.result.toLowerCase() === "agreed" || dataFile.games[i].black.result.toLowerCase() === "repetition" || dataFile.games[i].black.result.toLowerCase() === "insufficient")
+                else if(dataFile[i].black.result.toLowerCase() === "stalemate" || dataFile[i].black.result.toLowerCase() === "agreed" || dataFile[i].black.result.toLowerCase() === "repetition" || dataFile[i].black.result.toLowerCase() === "insufficient")
                 {
                     results.push("draw"); 
                 }
-                else if(dataFile.games[i].black.result.toLowerCase() === "checkmated" || dataFile.games[i].black.result.toLowerCase() === "resigned" || dataFile.games[i].black.result.toLowerCase() === "timeout")
+                else if(dataFile[i].black.result.toLowerCase() === "checkmated" || dataFile[i].black.result.toLowerCase() === "resigned" || dataFile[i].black.result.toLowerCase() === "timeout")
                 {
                     results.push("lose");
                 }

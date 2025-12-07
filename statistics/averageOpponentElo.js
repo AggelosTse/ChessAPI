@@ -4,19 +4,19 @@ export function averageOpponentElo(dataFile,name)
     let sum = 0;
     
 
-    for(let i=0;i<dataFile.games.length;i++)
+    for(let i=0;i<dataFile.length;i++)
     {
-        if(!dataFile.games[i].white.rating || !dataFile.games[i].black.rating) continue
+        if(!dataFile[i].white.rating || !dataFile[i].black.rating) continue
 
 
-        if(dataFile.games[i].white.username.toLowerCase() === name.toLowerCase())
+        if(dataFile[i].white.username.toLowerCase() === name.toLowerCase())
         {
-            sum += dataFile.games[i].black.rating;
+            sum += dataFile[i].black.rating;
             pl++;
         }
-        else if (dataFile.games[i].black.username.toLowerCase() === name.toLowerCase())
+        else if (dataFile[i].black.username.toLowerCase() === name.toLowerCase())
         {
-            sum += dataFile.games[i].white.rating;
+            sum += dataFile[i].white.rating;
             pl++
         }
        

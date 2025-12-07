@@ -12,7 +12,7 @@ export function CommonOpenings(dataFile,name) {
     // Regex to match moves (simplified but works for standard algebraic notation)
     const moveRegex = /[KQRNB]?[a-h]?[1-8]?[x-]?[a-h][1-8](?:=[QRNB])?|O-O(?:-O)?/g;
 
-    for (const game of dataFile.games) {
+    for (const game of dataFile) {
         if (!game.pgn) continue;
 
         // Clean PGN: remove headers, comments, move numbers, result markers
