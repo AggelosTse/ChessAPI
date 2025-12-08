@@ -96,7 +96,7 @@ export function CommonOpenings(dataFile,name) {
 
     } else {
         console.log('Not enough White games found for opening analysis.');
-        finalOpeningList.push("NA");
+        finalOpeningList.push("NA",0,0);
     }
 
     if (mostBlack) {
@@ -110,7 +110,7 @@ export function CommonOpenings(dataFile,name) {
         
     } else {
         console.log('Not enough Black games found for opening analysis.');
-        finalOpeningList.push("NA");
+        finalOpeningList.push("NA",0,0);
     }
 
     return finalOpeningList;

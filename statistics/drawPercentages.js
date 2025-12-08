@@ -39,9 +39,7 @@ export function drawPercentage(dataFile)
         
         if(drawtotal === 0)
         {
-            console.log("no draws found. \n")
-            finalDrawArray.push("NA");
-            return;
+            return [0,0,0,0,0,0,0,0];
         }
 
 

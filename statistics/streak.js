@@ -44,9 +44,13 @@ export function streaks(dataFile,name)
 
     console.log(results);
 
-    findWinStreak(results);
-    findDrawStreak(results);
-    findLoseStreak(results);
+    let tempWins = findWinStreak(results);
+    let tempDraws = findDrawStreak(results);
+    let tempLoses = findLoseStreak(results);
+
+    finalStreaksList.push(tempWins,tempDraws,tempLoses);
+
+    return finalStreaksList;
 }
 
 function findWinStreak(results) {
@@ -63,11 +67,8 @@ function findWinStreak(results) {
     }
 
     if (winCounter > 0) listOfWinCounts.push(winCounter);
-
-    console.log("All win streaks:", listOfWinCounts);
-    console.log("Longest win streak:", Math.max(0, ...listOfWinCounts));
     
-    finalStreaksList.push(Math.max(0, ...listOfWinCounts));
+    return Math.max(0, ...listOfWinCounts);
 }
 
 
@@ -87,10 +88,7 @@ function findDrawStreak(results)
 
     if (drawCounter > 0) listOfDrawCounts.push(drawCounter);
 
-    console.log("All draw streaks:", listOfDrawCounts);
-    console.log("Longest draw streak:", Math.max(0, ...listOfDrawCounts));
-
-    finalStreaksList.push(Math.max(0, ...listOfDrawCounts));
+    return Math.max(0, ...listOfDrawCounts);
 
 }
 
@@ -110,10 +108,9 @@ function findLoseStreak(results)
 
     if (loseCounter > 0) listOfLoseCounts.push(loseCounter);
 
-    console.log("All lose streaks:", listOfLoseCounts);
-    console.log("Longest lose streak:", Math.max(0, ...listOfLoseCounts));
+   
 
-    finalStreaksList.push(Math.max(0, ...listOfLoseCounts));
+    return Math.max(0, ...listOfLoseCounts);
 }
 
 

@@ -62,9 +62,7 @@ export function winPercentage(dataFile,name)
     }
     if(totalwins === 0)
     {
-        console.log("No wins found.");
-        finalWinList.push("NA");
-        return;
+        return [0,0,0,0,0,0];
     }
 
     console.log("Wins By Checkmates: \n");

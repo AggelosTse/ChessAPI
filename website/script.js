@@ -68,7 +68,7 @@ async function handleSubmit(event) {
     }
 
     const results = await nextPhase(name,mainOption,subOption);  //json me stats
-  
+    console.log(results)
 }
 
 document.getElementById("mainOption").addEventListener("change", showSubOptions);

@@ -36,24 +36,17 @@ export function averageAccuracy(dataFile,name)
         }
     }
     if (generalPL === 0) {
-        console.log("No games played in this period.");
-
-        accuracyArray.push("NA");
-        return [];
+        return [0,0,0];
     }
 
-    console.log("General Accuracy:", Math.round((generalSum / generalPL)));
     accuracyArray.push(generalSum / generalPL);
 
     if (whitePL > 0)
     {
-        console.log("White Accuracy:", Math.round((whiteSum / whitePL)));
         accuracyArray.push(whiteSum / whitePL);
     }
     else 
     {
-
-    
         console.log("No white games played in this period.");
         accuracyArray.push("NA");
     }

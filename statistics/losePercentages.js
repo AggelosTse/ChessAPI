@@ -62,9 +62,7 @@ export function losePercentage(dataFile,name)
 
     if(losetotal === 0) 
     {
-        console.log("No loses found. \n");
-        finalLoseList.push("NA");
-        return;
+        return [0,0,0,0,0,0];
     }
         
         

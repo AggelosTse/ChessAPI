@@ -10,7 +10,7 @@ export function averageMoves(dataFile,name)
 
     for(let i=0;i<dataFile.length;i++)
     {
-        const movesOnly = dataFile.games[i].pgn
+        const movesOnly = dataFile[i].pgn
 
             .replace(/\[.*?\]/gs, '')              // Remove headers
             .replace(/\{.*?\}|\(.*?\)|\$\d+/g, '') // Remove comments and variations
