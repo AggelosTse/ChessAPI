@@ -14,7 +14,7 @@ export async function getYearsData(name, subOption)
     {
         const month = padMonth(i);
         const url = `https://api.chess.com/pub/player/${name}/games/${subOption}/${month}`;
-
+        
         fullyearlist.push(
             fetch(url)
                 .then(response => response.ok ? response.json() : { games: [] })

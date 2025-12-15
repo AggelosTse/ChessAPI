@@ -22,7 +22,7 @@ export function averageOpponentElo(dataFile,name)
         }
         else if (blackName.toLowerCase() === name.toLowerCase())
         {
-            sum += whiteName;
+            sum += whiteRating;
             pl++
         }
        
