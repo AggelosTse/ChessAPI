@@ -10,6 +10,8 @@ import { CommonOpenings } from './statistics/mostCommonOpening.js';
 import { streaks } from './statistics/streak.js';
 import { averageMoves } from './statistics/averageTotalMoves.js';
 import { highestOpponentElo } from './statistics/highestOpponentElo.js';
+import { maxelo } from './statistics/maxPlayerElo.js';
+import { allElos } from './statistics/allPlayerELo.js';
 
 
 export async function nextPhase(name,mainOption,subOption)
@@ -38,7 +40,11 @@ export async function nextPhase(name,mainOption,subOption)
 
     const averagMove = averageMoves(data,name); //value 
 
-    const results = await makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove);
+    const maxPlayerElo = maxelo(data,name);
+
+    const allelo = allElos(data,name);
+
+    const results = await makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove,maxPlayerElo,allelo);
 
     return results;
 

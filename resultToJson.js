@@ -1,4 +1,4 @@
-export async function makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove)
+export async function makejson(accuracy,total,averageOpponElo,highestOppElo,winPerc,drawPerc,losePerc,commonOp,streak,averagMove,maxPlayerElo,allelo)
 {
     const statistics = {
 
@@ -47,7 +47,11 @@ export async function makejson(accuracy,total,averageOpponElo,highestOppElo,winP
         "DrawStreak" : streak[1],
         "LoseStreak" : streak[2],
         
-        "AverageSumOfMoves " : averagMove
+        "AverageSumOfMoves " : averagMove,
+
+        "maxPlayerElo" : maxPlayerElo,
+
+        "allElo" : allelo
     }
     return statistics;
 }
