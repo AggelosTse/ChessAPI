@@ -43,7 +43,7 @@ export function averageAccuracy(dataFile,name)
         }
         else if(blackName.toLowerCase() === name.toLowerCase())
         {
-            if(whiteAccuracy === null || blackAccuracy === undefined) continue;
+            if(blackAccuracy === null || blackAccuracy === undefined) continue;
 
             generalSum += blackAccuracy;
             generalPL++;
@@ -56,11 +56,11 @@ export function averageAccuracy(dataFile,name)
         return [0,0,0];
     }
 
-    accuracyArray.push(generalSum / generalPL);
+    accuracyArray.push(Math.floor(generalSum / generalPL));
 
     if (whitePL > 0)
     {
-        accuracyArray.push(whiteSum / whitePL);
+        accuracyArray.push(Math.floor(whiteSum / whitePL));
     }
     else 
     {
@@ -69,7 +69,7 @@ export function averageAccuracy(dataFile,name)
 
     if (blackPL > 0)
     {
-        accuracyArray.push(blackSum / blackPL);
+        accuracyArray.push(Math.floor(blackSum / blackPL));
     }
     else
     {

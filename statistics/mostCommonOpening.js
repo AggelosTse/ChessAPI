@@ -86,7 +86,7 @@ export function CommonOpenings(dataFile,name) {
 
     if (mostWhite) {
         const { count, wins } = mostWhite.data;
-        const winrate = count ? (wins / count).toFixed(3)*100 : 'N/A';
+        const winrate = count ? Math.floor((wins / count)*100) : 'N/A';
 
         finalOpeningList.push(mostWhite.opening,count,winrate);
 
@@ -97,7 +97,7 @@ export function CommonOpenings(dataFile,name) {
 
     if (mostBlack) {
         const { count, wins } = mostBlack.data;
-        const winrate = count ? (wins / count).toFixed(3)*100 : 'N/A';
+        const winrate = count ? Math.floor((wins / count)*100) : 'N/A';
      
 
         finalOpeningList.push(mostBlack.opening,count,winrate);

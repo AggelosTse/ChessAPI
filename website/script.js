@@ -57,15 +57,11 @@ async function handleSubmit(event) {
 
     const results = await nextPhase(name, mainOption, subOption);
     
-    // Εμφάνιση Container
     const container = document.getElementById("resultsContainer");
     container.style.display = "block";
     container.scrollIntoView({ behavior: 'smooth' });
 
-    // 1. Δημιουργία Γραφήματος (allElo)
     updateChart(results.allElo);
-
-    // 2. Εμφάνιση Υπόλοιπων Stats
     displayOtherStats(results);
 }
 
@@ -84,7 +80,7 @@ function updateChart(dataPoints) {
                 backgroundColor: 'rgba(95, 93, 240, 0.1)',
                 borderWidth: 3,
                 fill: true,
-                tension: 0.4, // Smooth line
+                tension: 0.4,
                 pointRadius: 2
             }]
         },
@@ -105,19 +101,22 @@ function displayOtherStats(results) {
     grid.innerHTML = "";
 
     Object.entries(results).forEach(([key, value]) => {
-        if (key === "allElo") return; // Παράλειψη του array για το γράφημα
+        if (key === "allElo") return; 
 
         const statCard = document.createElement("div");
         statCard.className = "card fade";
         statCard.style.width = "auto";
         statCard.style.margin = "0";
         
-        // Formatting του Key (π.χ. winStreak -> Win Streak)
+   
         const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-        
+     
+        const isPercentage = /Percentage|Accuracy|Winrate/i.test(key);
+        const displayValue = isPercentage ? `${value}%` : value;
+
         statCard.innerHTML = `
-            <div style="font-size: 12px; opacity: 0.6;">${formattedKey}</div>
-            <div style="font-size: 18px; font-weight: bold; color: #5f5df0; margin-top: 5px;">${value}</div>
+            <div style="font-size: 11px; opacity: 0.6; line-height: 1.2;">${formattedKey}</div>
+            <div style="font-size: 18px; font-weight: bold; color: #5f5df0; margin-top: 5px;">${displayValue}</div>
         `;
         grid.appendChild(statCard);
     });
